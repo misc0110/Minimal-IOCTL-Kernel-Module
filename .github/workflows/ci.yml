@@ -27,8 +27,10 @@ jobs:
           # Set an output parameter `uname` for use in subsequent steps
           run: |
             uname -a
+            whoami
+            apt install gcc g++ linux-headers-$(uname -r)
             make && cd module && make
-            sudo insmod module/sample.ko
+            insmod module/sample.ko
             ./example
             echo ::set-output name=uname::$(uname -a)
 
