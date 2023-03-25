@@ -28,6 +28,7 @@ jobs:
           run: |
             uname -a
             whoami
+            apt update
             apt install gcc g++ linux-headers-$(uname -r)
             make && cd module && make
             insmod module/sample.ko
