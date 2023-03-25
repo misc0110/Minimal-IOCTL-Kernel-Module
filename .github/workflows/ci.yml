@@ -12,4 +12,27 @@ jobs:
       - run: make && cd module && make
       - run: sudo insmod module/sample.ko
       - run: ./example
- 
+  armv7_job:
+    runs-on: ubuntu-latest
+    name: Build on ubuntu-latest armv7
+    steps:
+      - uses: actions/checkout@v3
+      - uses: uraimo/run-on-arch-action@v2
+        name: Run commands
+        id: runcmd
+        with:
+          arch: armv7
+          distro: ubuntu18.04
+
+          # Set an output parameter `uname` for use in subsequent steps
+          run: |
+            uname -a
+            make && cd module && make
+            sudo insmod module/sample.ko
+            ./example
+            echo ::set-output name=uname::$(uname -a)
+
+      - name: Get the output
+        # Echo the `uname` output parameter from the `runcmd` step
+        run: |
+          echo "The uname output was ${{ steps.runcmd.outputs.uname }}" 
